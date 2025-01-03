@@ -165,32 +165,36 @@ const Home = () => {
                 <section>
                     <div className="container mx-auto flex flex-col items-center px-6 py-4">
                         {/* Category Section */}
-                        <div className="w-full flex justify-center gap-4 overflow-x-auto py-4">
-                            {/* Add 'All' button */}
-                            <button
-                                onClick={() => handleMaterialSelection(null)} // Set material to null to fetch all products
-                                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${selectedMaterial === null
-                                    ? 'bg-golden text-white'
-                                    : 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
-                                    } hover:bg-golden hover:text-white`}
-                            >
-                                All
-                            </button>
-
-                            {/* Iterate through materials */}
-                            {materials && materials.map((tab, index) => (
+                        <div className="container mx-auto flex flex-col items-center px-6 py-4">
+                            {/* Category Section */}
+                            <div className="w-full flex justify-center gap-2 sm:gap-4 py-4 flex-wrap">
+                                {/* Add 'All' button */}
                                 <button
-                                    key={index}
-                                    onClick={() => handleMaterialSelection(tab.name)}
-                                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${selectedMaterial === tab.name
-                                        ? 'bg-golden text-white'
-                                        : 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
-                                        } hover:bg-golden hover:text-white`}
+                                    onClick={() => handleMaterialSelection(null)} // Set material to null to fetch all products
+                                    className={`px-3 py-1 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-300 ${selectedMaterial === null
+                                            ? 'bg-golden text-white'
+                                            : 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+                                        } hover:bg-golden hover:text-white focus:outline-none`}
                                 >
-                                    {tab.name}
+                                    All
                                 </button>
-                            ))}
+
+                                {/* Iterate through materials */}
+                                {materials && materials.map((tab, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => handleMaterialSelection(tab.name)}
+                                        className={`px-3 py-1 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-300 ${selectedMaterial === tab.name
+                                                ? 'bg-golden text-white'
+                                                : 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+                                            } hover:bg-golden hover:text-white focus:outline-none`}
+                                    >
+                                        {tab.name}
+                                    </button>
+                                ))}
+                            </div>
                         </div>
+
 
 
                         {/* Animated Heading */}
