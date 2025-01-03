@@ -1,0 +1,18 @@
+.custom-radio {
+    @apply appearance-none border-2 border-gray-300 rounded-full w-6 h-6 cursor-pointer relative;
+}
+
+.custom-radio:checked {
+    @apply border-yellow-500;
+}
+
+.custom-radio:checked::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: gold;
+}
