@@ -1,23 +1,27 @@
-import { useEffect, useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { usefilter } from '../App';
+import { filterContext, usefilter } from '../App';
 import { toast } from 'sonner';
-import { useGetCArouselQuery, useGetTaxesQuery, useLazyGetFilteredDataQuery, useLazyGetAllProductsQuery, useGetAllMenuItemsQuery } from '../redux/apis/openApi';
+import { useGetCArouselQuery, useGetTaxesQuery, useLazyGetFilteredDataQuery, useLazyGetAllProductsQuery, useGetPublicProductMaterialQuery } from '../redux/apis/openApi';
 import ScrollCard from './ScrollCard';
 import AddsImages from './AddsImages';
 import Footer from './Footer';
 import BottomNav from '../user/BottomNav';
 import useScrollRestoration from '../hooks/useScrollRestoration';
+import { debounce } from 'lodash';
 
 const Home = () => {
-    const { selectedType } = usefilter();
-    const { data: navmenus } = useGetAllMenuItemsQuery();
-    useScrollRestoration()
+    const { selectedType } = usefilter(filterContext);
+    useScrollRestoration();
+
     const [allProducts, setAllProducts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const productsPerPage = 8;
+    const { data: materials } = useGetPublicProductMaterialQuery();
+    const [selectedMaterial, setSelectedMaterial] = useState(null); // Selected material
 
     const { data: taxes } = useGetTaxesQuery();
     const [filter, { data: filteredData, isSuccess: isFilterSuccess, isError: isFilterError, error: filterError }] = useLazyGetFilteredDataQuery();
@@ -26,15 +30,46 @@ const Home = () => {
     const { data: carousel = [] } = useGetCArouselQuery();
     const [currentSlide, setCurrentSlide] = useState(0);
 
-    const discountTax = taxes?.find(tax => tax.taxName === "Discount");
+    const discountTax = useMemo(() => {
+        return taxes?.find(tax => tax.taxName === "Discount");
+    }, [taxes]);
 
-    const applyDiscount = (price) => {
+    const applyDiscount = useCallback((price) => {
         if (discountTax) {
             const discountAmount = (price * discountTax.percent) / 100;
             return price - discountAmount;
         }
         return price;
-    };
+    }, [discountTax]);
+
+    useEffect(() => {
+        // Fetch all products if no material is selected (i.e., selectedMaterial is null)
+        if (!selectedMaterial) {
+            fetchProducts({ page: currentPage, limit: productsPerPage });
+        }
+    }, [fetchProducts, currentPage, selectedMaterial, productsPerPage]);
+
+
+    const debouncedFilter = useCallback(
+        debounce((filterParams) => {
+            filter(filterParams);
+        }, 500), // Delay of 500ms
+        []
+    );
+
+    useEffect(() => {
+        // Fetch all products if no material is selected (i.e., selectedMaterial is null)
+        if (!selectedMaterial) {
+            fetchProducts({ page: currentPage, limit: productsPerPage });
+        }
+    }, [fetchProducts, currentPage, selectedMaterial, productsPerPage]);
+
+    useEffect(() => {
+        // If a material is selected, filter the products by material
+        if (selectedMaterial) {
+            debouncedFilter({ material: selectedMaterial, page: currentPage, limit: productsPerPage });
+        }
+    }, [selectedMaterial, currentPage, debouncedFilter]);
 
     useEffect(() => {
         if (carousel.length === 0) return;
@@ -47,9 +82,9 @@ const Home = () => {
 
     useEffect(() => {
         if (selectedType) {
-            filter({ productType: selectedType });
+            debouncedFilter({ productType: selectedType });
         }
-    }, [selectedType, filter]);
+    }, [selectedType, debouncedFilter]);
 
     useEffect(() => {
         if (isFilterError) {
@@ -59,9 +94,19 @@ const Home = () => {
 
     useEffect(() => {
         if (!selectedType) {
-            fetchProducts({ page: currentPage, limit: productsPerPage });
+            fetchProducts({ page: currentPage, limit: productsPerPage, material: null });
         }
     }, [fetchProducts, currentPage, selectedType]);
+    useEffect(() => {
+        if (selectedType) {
+            fetchProducts({ page: currentPage, limit: productsPerPage, material: selectedMaterial });
+        }
+    }, [fetchProducts, currentPage, selectedType]);
+    // useEffect(() => {
+    //     if (selectedMaterial) {
+    //         filter({ material: selectedMaterial, page: filterPage, limit: productsPerPage });
+    //     }
+    // }, [selectedMaterial, currentPage, filter, filterPage]);
 
     useEffect(() => {
         if (isFilterSuccess && filteredData) {
@@ -86,11 +131,14 @@ const Home = () => {
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
-    console.log("navmenus", navmenus);
+
+    const handleMaterialSelection = (material) => {
+        setSelectedMaterial(material); // If material is null, it will show all products
+    };
+    // console.log("allProducts", allProducts);
 
     return (
         <div className='bg-light-golden dark:bg-gray-900'>
-
             <div className='mx-3'>
                 <div className="relative w-full h-32 md:h-96 t-6 overflow-hidden rounded-md">
                     <div className="relative w-full h-full">
@@ -107,18 +155,6 @@ const Home = () => {
                                     className="w-full h-28 md:h-full object-cover"
                                     alt={`Slide ${index + 1}`}
                                 />
-                                {/* <div className="absolute inset-0 flex items-center justify-start p-6 bg-gradient-to-r from-black via-transparent to-black opacity-50 ">
-                                    <motion.div
-                                        className="text-white bg-black bg-opacity-60 p-4 rounded-lg"
-                                        initial={{ x: -100, opacity: 0 }}
-                                        animate={{ x: 0, opacity: 1 }}
-                                        exit={{ x: -100, opacity: 0 }}
-                                        transition={{ duration: 1, ease: 'easeInOut' }}
-                                    >
-                                        <h2 className="text-4xl font-bold mb-4">{item.mainHeading}</h2>
-                                        <p className="text-lg">{item.paragraph}</p>
-                                    </motion.div>
-                                </div> */}
                             </motion.div>
                         ))}
                     </div>
@@ -128,6 +164,35 @@ const Home = () => {
 
                 <section>
                     <div className="container mx-auto flex flex-col items-center px-6 py-4">
+                        {/* Category Section */}
+                        <div className="w-full flex justify-center gap-4 overflow-x-auto py-4">
+                            {/* Add 'All' button */}
+                            <button
+                                onClick={() => handleMaterialSelection(null)} // Set material to null to fetch all products
+                                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${selectedMaterial === null
+                                    ? 'bg-golden text-white'
+                                    : 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+                                    } hover:bg-golden hover:text-white`}
+                            >
+                                All
+                            </button>
+
+                            {/* Iterate through materials */}
+                            {materials && materials.map((tab, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => handleMaterialSelection(tab.name)}
+                                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${selectedMaterial === tab.name
+                                        ? 'bg-golden text-white'
+                                        : 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+                                        } hover:bg-golden hover:text-white`}
+                                >
+                                    {tab.name}
+                                </button>
+                            ))}
+                        </div>
+
+
                         {/* Animated Heading */}
                         <motion.h2
                             className="text-3xl font-bold text-gray-900 dark:text-white mb-8"
@@ -138,6 +203,7 @@ const Home = () => {
                             Recommended for You
                         </motion.h2>
 
+                        {/* Desktop Grid */}
                         <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-8">
                             {allProducts.map(item => (
                                 <Link
@@ -172,34 +238,39 @@ const Home = () => {
                                         <p className="font-bold text-gray-900 dark:text-gray-200" style={{ fontSize: 14 }}>{item.name}</p>
                                         <p className="text-sm text-gray-700 dark:text-gray-400">{item.desc}</p>
                                         <div className="flex items-center text-sm">
-                                            <p className="mr-1 font-semibold text-gray-900 dark:text-gray-200" style={{ fontSize: 12 }}>${applyDiscount(item.varient[0]?.price)}</p>
-                                            <p style={{ fontSize: 12 }} className="text-gray-500 line-through text-sm dark:text-gray-600">${item.varient[0]?.mrp}</p>
+                                            <p className="mr-2 font-semibold">${applyDiscount(item.varient[0]?.price)}</p>
+                                            <p className="text-xs line-through">${item.varient[0]?.mrp}</p>
                                         </div>
-                                        <p className="ml-auto text-green-500 text-sm" style={{ fontSize: 12 }}>{item.varient[0]?.discount} off</p>
                                     </div>
                                 </Link>
                             ))}
                         </div>
-                        {!selectedType && (
-                            <div className="flex justify-center mt-8">
-                                {Array.from({ length: totalPages }, (_, index) => (
-                                    <button
-                                        key={index}
-                                        onClick={() => handlePageChange(index + 1)}
-                                        className={`mx-1 px-4 py-2 rounded-md ${currentPage === index + 1 ? 'bg-golden text-white' : 'bg-white text-black border dark:bg-gray-700 dark:text-white'}`}
-                                    >
-                                        {index + 1}
-                                    </button>
-                                ))}
-                            </div>
-                        )}
+
+                        {/* Pagination */}
+                        <div className="flex justify-center mt-6">
+                            <button
+                                onClick={() => handlePageChange(currentPage - 1)}
+                                disabled={currentPage === 1}
+                                className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md mr-2"
+                            >
+                                Previous
+                            </button>
+                            <button
+                                onClick={() => handlePageChange(currentPage + 1)}
+                                disabled={currentPage === totalPages}
+                                className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md"
+                            >
+                                Next
+                            </button>
+                        </div>
                     </div>
                 </section>
             </div>
+
             <Footer />
             <BottomNav />
         </div>
     );
-}
+};
 
 export default Home;

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLogoutUserMutation } from '../redux/apis/userAuthApi';
-import { filterContext, usefilter } from '../App';
+// import { filterContext, usefilter } from '../App';
 import { useSelector } from 'react-redux';
 import { useGetAllCartItemsQuery } from '../redux/apis/userApi';
 import { useGetAllCAtegoriesQuery, useGetAllMenuItemsQuery, useGetCompanyDetailsQuery, useGetTaxesQuery } from '../redux/apis/openApi';
@@ -12,7 +12,7 @@ const UserNavbar = () => {
     const { data: navmenus } = useGetAllMenuItemsQuery();
     const { data: taxes } = useGetTaxesQuery();
     // const navigate = useNavigate();
-    const { setSelectedType } = usefilter(filterContext);
+    // const { setSelectedType } = usefilter(filterContext);
     const [logoutUser] = useLogoutUserMutation();
     const [isSidebarOpen, setSidebarOpen] = useState(false);
     const { user } = useSelector(state => state.userData);
@@ -68,9 +68,9 @@ const UserNavbar = () => {
 
 
                         {/* Desktop Menu */}
-                        <div className="hidden md:flex space-x-6 z-1000">
+                        <div className="hidden md:flex space-x-6 z-1000 ">
                             {/* Categories Dropdown */}
-                            <div className="dropdown dropdown-hover z-1000">
+                            {/* <div className="dropdown dropdown-hover z-1000">
                                 <div className="btn btn-ghost dark:text-white text-gray-900">Categories</div>
                                 <div className="dropdown-content p-4 bg-gray-50 dark:bg-gray-800 rounded-box shadow w-[250px]">
                                     {allCategories?.map(category => (
@@ -83,7 +83,7 @@ const UserNavbar = () => {
                                         </Link>
                                     ))}
                                 </div>
-                            </div>
+                            </div> */}
 
 
                             {/* Menus Dropdown */}

@@ -127,6 +127,16 @@ export const openApi = createApi({
                 transformResponse:data => data.result,
                 invalidatesTags: ["user"]
             }),
+            getPublicProductMaterial: builder.query({
+                query: () => {
+                    return {
+                        url: `/get-product-material`,
+                        method: "GET",
+                    }
+                },
+                transformResponse: data => data.result,
+                providesTags: ["material"]
+            }),
            
         }
     }
@@ -146,7 +156,8 @@ export const {
     useGetAllScrollCardsQuery,
     useGetAllMenuItemsQuery,
     useGetAllAddImagesQuery,
-    usePostHistoryMutation
+    usePostHistoryMutation,
+    useGetPublicProductMaterialQuery
     // useGetVarientQuery
 } = openApi;
 
