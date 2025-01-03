@@ -229,24 +229,21 @@ const UserNavbar = () => {
                         <Theme />
 
                         {/* Profile */}
-                        {user ? (
-                            <div className="dropdown dropdown-end hidden md:block dark:text-white">
-                                <button className="btn btn-ghost btn-circle avatar">
-                                    <img
-                                        className="w-8 rounded-full"
-                                        src={user.image || 'https://via.placeholder.com/150'}
-                                        alt="User Avatar"
-                                    />
-                                </button>
-                                <ul className="dropdown-content menu p-2 w-48 bg-light-golden dark:bg-gray-800 rounded-box shadow">
-                                    <li><Link to="/user/profile">Profile</Link></li>
-                                    <li><Link to="/admin/dashboard">Admin Page</Link></li>
-                                </ul>
-                            </div>
-                        ) : (
-                            <></>
-                            // <button onClick={() => navigate('/user/login')} className="btn btn-primary">Login</button>
-                        )}
+
+                        <div className="dropdown dropdown-end hidden md:block dark:text-white">
+                            <button className="btn btn-ghost btn-circle avatar">
+                                <img
+                                    className="w-8 rounded-full"
+                                    src={user && user.image || 'https://via.placeholder.com/150'}
+                                    alt="User Avatar"
+                                />
+                            </button>
+                            <ul className="dropdown-content menu p-2 w-48 bg-light-golden dark:bg-gray-800 rounded-box shadow">
+                                <li><Link to="/user/profile">Profile</Link></li>
+                                <li><Link to="/admin/dashboard">Admin Page</Link></li>
+                            </ul>
+                        </div>
+
                     </div>
                 </div>
             </div>
