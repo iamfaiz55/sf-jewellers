@@ -53,7 +53,7 @@ const CheckOut = () => {
                 ...cartData,
                 deliveryAddressId: selectedAddress,
                 subtotal: total,
-                cartItems: [{ productId: selectedProd, quantity, varientId: selectedProd.varient._id }],
+                cartItems: [{ productId: selectedProd, quantity, varientId: selectedProd.varient?._id }],
             });
             navigate("/user/payment");
         } else {
@@ -258,6 +258,7 @@ const Form = ({ edit }) => {
             addressType: "",
             mobile: "",
             email: "",
+            adddress: "",
         },
         validationSchema: yup.object({
             pincode: yup.string().required("Enter pincode"),
@@ -308,6 +309,7 @@ const Form = ({ edit }) => {
                     <input {...formik.getFieldProps("pincode")} type="number" placeholder="Pincode" className="input w-full my-2" />
                     <input {...formik.getFieldProps("country")} type="text" placeholder="Country" className="input w-full my-2" />
                     <input {...formik.getFieldProps("mobile")} type="number" placeholder="Mobile" className="input w-full my-2" />
+                    <input {...formik.getFieldProps("address")} type="string" placeholder="Address" className="input w-full my-2" />
                     {/* { */}
                     {/* // user && user.email */}
                     {/* // ? <></> */}

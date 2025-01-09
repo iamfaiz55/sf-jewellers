@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useDeleteCArtItemMutation, useGetAllCartItemsQuery } from '../redux/apis/userApi';
 import { useSelector } from 'react-redux';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { CartContext } from '../App';
-import { useGetTaxesQuery, usePostHistoryMutation } from '../redux/apis/openApi';
+import { useGetTaxesQuery } from '../redux/apis/openApi';
 import BottomNav from '../user/BottomNav';
 import useScrollRestoration from '../hooks/useScrollRestoration';
 
 const Cart = () => {
     useScrollRestoration()
-    const [postHistory] = usePostHistoryMutation()
+    // const [postHistory] = usePostHistoryMutation()
 
     const { user } = useSelector(state => state.userData);
     const { data: taxes } = useGetTaxesQuery();
@@ -23,7 +23,7 @@ const Cart = () => {
     const [salesTax, setSalesTax] = useState(0);
 
     const [deleteItem, { isSuccess }] = useDeleteCArtItemMutation();
-    const { cartData, setCartData } = useContext(CartContext);
+    const { setCartData } = useContext(CartContext);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -75,11 +75,11 @@ const Cart = () => {
         }
     }, [isSuccess]);
 
-    useEffect(() => {
-        if (user) {
-            postHistory({ userId: user._id, type: "cart", cartId: data._id })
-        }
-    }, [])
+    // useEffect(() => {
+    //     if (user) {
+    //         postHistory({ userId: user._id, type: "cart", cartId: data._id })
+    //     }
+    // }, [])
 
     return (
         <div className="min-h-screen pt-5 bg-light-golden dark:bg-gray-900 pb-24">

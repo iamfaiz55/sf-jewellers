@@ -11,7 +11,20 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 
 export const userApi = createApi({
     reducerPath: "userApi",
-    baseQuery: fetchBaseQuery({ baseUrl:`${import.meta.env.VITE_BACKEND_URL}/api/user`, credentials:"include" }),
+    baseQuery: fetchBaseQuery({ baseUrl:`${import.meta.env.VITE_BACKEND_URL}/api/user`,
+         credentials:"include",
+         prepareHeaders: (headers, { getState, body }) => {
+            const token = getState().userData.token;
+            // Set Authorization header if token exists
+            if (token) {
+                headers.set("Authorization", `Bearer ${token}`);
+            }
+
+
+
+            return headers;
+        }
+ }),
     // baseQuery: fetchBaseQuery({ baseUrl:`http://localhost:5000/api/user`, credentials:"include" }),
     tagTypes: ["user"],
     endpoints: (builder) => {
@@ -47,37 +60,7 @@ export const userApi = createApi({
                 transformResponse:data => data.result,
                 providesTags: ["user"]
             }),
-            // getFilteredData: builder.query({
-            //     query: (type) => {
-            //         return {
-            //             url: `/filter`,
-            //             method: "GET",
-            //              params:type
-            //         }
-            //     },
-            //     transformResponse:data => data.result,
-            //     providesTags: ["user"]
-            // }),
-            // getCArousel: builder.query({
-            //     query: (id) => {
-            //         return {
-            //             url: `/carousel`,
-            //             method: "GET"
-            //         }
-            //     },
-            //     transformResponse:data => data.result,
-            //     providesTags: ["user"]
-            // }),
-            // getAllProducts: builder.query({
-            //     query: () => {
-            //         return {
-            //             url: "/get-products",
-            //             method: "GET"
-            //         }
-            //     },
-            //     transformResponse:data =>data.result,
-            //     providesTags: ["user"]
-            // }),
+            
             addAddress: builder.mutation({
                 query: addressData => {
                     return {
@@ -98,17 +81,7 @@ export const userApi = createApi({
                 },
                 invalidatesTags: ["user"]
             }),
-            // getDetails: builder.query({
-            //     query: id => {
-            //         return {
-            //             url: `/details/${id}`,
-            //             method: "GET",
-            //             // body: addressData
-            //         }
-            //     },
-            //     transformResponse:data => data.result,
-            //     providesTags: ["user"]
-            // }),
+         
             getAddresses: builder.query({
                 query: id => {
                     return {
@@ -266,30 +239,14 @@ export const userApi = createApi({
                 providesTags: ["user"]
             }),
 
-            updateProfile: builder.mutation({
-                query: data => {
-                    return {
-                        url: `/update-profile`,
-                        method: "PUT",
-                        body: data
-                    }
-                },
-                transformResponse:data => {
-                    const userProfile = JSON.parse(localStorage.getItem("user"));
-        
-                    if (userProfile._id == data.result._id) {
-                        // userProfile.image = data.result.image;
-                        localStorage.setItem("user", JSON.stringify(data.result));
-                    }   
-                },
-                invalidatesTags: ["user"]
-            }),
+           
             updateProfileData: builder.mutation({
                 query: data => {
                     return {
                         url: `/update-profile-data/${data._id}`,
                         method: "PUT",
-                        body: data
+                        body: data,
+                        // headers: { 'Content-Type': 'multipart/form-data' },
                     }
                 },
                 transformResponse:data => {
@@ -299,6 +256,7 @@ export const userApi = createApi({
                         // userProfile.image = data.result.image;
                         localStorage.setItem("user", JSON.stringify(data.result));
                     }   
+                    return data.result
                 },
                 invalidatesTags: ["user"]
             }),
@@ -332,7 +290,7 @@ export const {
     useDeleteFullCartMutation,
     useCancelOrderMutation,
 
-    useUpdateProfileMutation,
+    // useUpdateProfileMutat/ion,
     useLikeMutation,
     useDeleteLikeMutation,
     useGetLikedQuery,

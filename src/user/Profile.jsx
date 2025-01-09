@@ -3,39 +3,47 @@ import { useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import * as yup from 'yup';
+// import imageCompression from 'browser-image-compression';
+
 import {
 
     useUpdateProfileDataMutation,
-    useUpdateProfileMutation
+
 } from '../redux/apis/userApi';
 import { useFormik } from 'formik';
 import Liked from '../components/Liked';
 import AllOrders from './AllOrders';
 import { useLogoutUserMutation } from '../redux/apis/userAuthApi';
 import BottomNav from './BottomNav';
-import { usePostHistoryMutation } from '../redux/apis/openApi';
+// import { usePostHistoryMutation } from '../redux/apis/openApi';
 import Addresses from './Addresses';
+import { useUpdateProfileMutation } from '../redux/apis/userFormApi';
 
 const Profile = () => {
-    const [logoutUser, { isSuccess: logoutSuccess, isLoading: logoutLoading }] = useLogoutUserMutation()
+    const [logoutUser, { isSuccess: logoutSuccess }] = useLogoutUserMutation()
     const [isSmallSidebarOpen, setIsSmallSidebarOpen] = useState(false);
     const [currentSection, setCurrentSection] = useState('profile');
     const [updateProfile, { isSuccess, isLoading }] = useUpdateProfileMutation();
     const { user } = useSelector((state) => state.userData);
+    const [isEditMode, setIsEditMode] = useState(false);
 
-    const [updateProfileData, { isSuccess: updateSuccess, isLoading: updateLoading }] = useUpdateProfileDataMutation()
+    const [updateProfileData, { isSuccess: updateSuccess }] = useUpdateProfileDataMutation()
 
     const fileInputRef = useRef();
-    const [postHistory] = usePostHistoryMutation()
+    // const [postHistory] = usePostHistoryMutation()
     const handleClick = () => {
         fileInputRef.current.click();
     };
 
     const handleInput = (e) => {
         const file = e.target.files[0];
+
+
         const fd = new FormData();
         fd.append('images', file);
         fd.append('userId', user._id);
+        // updateProfile(fd);
+
         updateProfile(fd);
     };
 
@@ -54,19 +62,21 @@ const Profile = () => {
         onSubmit: (values, { resetForm }) => {
             updateProfileData({ ...values, _id: user._id })
             resetForm()
+            setIsEditMode(false);
+
         }
     })
     useEffect(() => {
         if (isSuccess) {
             toast.success('Profile Update Success');
-            location.reload()
+            // location.reload()
         }
     }, [isSuccess]);
     useEffect(() => {
         if (updateSuccess) {
             toast.success("Profile Update Success")
-            location.reload()
-            document.getElementById("update").close()
+            // location.reload()
+            // document.getElementById("update").close()
         }
     }, [updateSuccess])
 
@@ -79,18 +89,6 @@ const Profile = () => {
             // postHistory({ userId: user._id, type: "logout" })
         }
     }, [logoutSuccess])
-    useEffect(() => {
-        if (logoutLoading) {
-            // toast.success("User Logout Success")
-            postHistory({ userId: user._id, type: "logout" })
-        }
-    }, [logoutLoading, postHistory, user._id])
-
-    useEffect(() => {
-        if (user) {
-            postHistory({ userId: user._id, type: "profile" })
-        }
-    }, [])
 
 
     return (
@@ -215,7 +213,7 @@ const Profile = () => {
                                     </button>
                                 </div>
 
-                                <dialog id="update" className="modal border-yellow-400 rounded-lg">
+                                {/* <dialog id="update" className="modal border-yellow-400 rounded-lg">
                                     <div className="modal-box relative bg-light-golden text-black dark:text-white dark:bg-gray-900">
                                         {updateLoading ? (
                                             <div className="absolute inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-10">
@@ -268,7 +266,7 @@ const Profile = () => {
                                             </>
                                         )}
                                     </div>
-                                </dialog>
+                                </dialog> */}
 
 
                                 <div className="mt-4 w-full">
@@ -276,24 +274,74 @@ const Profile = () => {
                                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
                                             <div className="flex flex-col items-start justify-center rounded-2xl bg-golden dark:bg-gray-800 bg-clip-border px-4 py-3 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
                                                 <p className="text-xs sm:text-sm text-black dark:text-gray-300">Name</p>
-                                                <p className="text-xs sm:text-sm font-medium text-black dark:text-gray-300 overflow-hidden">
-                                                    {user?.name}
-                                                </p>
+                                                {isEditMode ? (
+                                                    <input
+                                                        type="text"
+                                                        name="name"
+                                                        className="text-xs sm:text-sm font-medium text-black dark:text-gray-300 w-full p-2 border rounded"
+                                                        value={formik.values.name}
+                                                        onChange={formik.handleChange}
+                                                    />
+                                                ) : (
+                                                    <p className="text-xs sm:text-sm font-medium text-black dark:text-gray-300 overflow-hidden">
+                                                        {user?.name}
+                                                    </p>
+                                                )}
                                             </div>
 
                                             <div className="flex flex-col justify-center rounded-2xl bg-golden dark:bg-gray-800 bg-clip-border px-4 py-3 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
                                                 <p className="text-xs sm:text-sm text-black dark:text-gray-300">Email</p>
-                                                <p className="text-xs sm:text-sm font-medium text-black dark:text-gray-300 overflow-hidden">
-                                                    {user?.email}
-                                                </p>
+                                                {isEditMode ? (
+                                                    <input
+                                                        type="email"
+                                                        name="email"
+                                                        className="text-xs sm:text-sm font-medium text-black dark:text-gray-300 w-full p-2 border rounded"
+                                                        value={formik.values.email}
+                                                        onChange={formik.handleChange}
+                                                    />
+                                                ) : (
+                                                    <p className="text-xs sm:text-sm font-medium text-black dark:text-gray-300 overflow-hidden">
+                                                        {user?.email}
+                                                    </p>
+                                                )}
                                             </div>
 
                                             <div className="flex flex-col items-start justify-center rounded-2xl bg-golden dark:bg-gray-800 bg-clip-border px-4 py-3 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
                                                 <p className="text-xs sm:text-sm text-black dark:text-gray-300">Mobile</p>
-                                                <p className="text-xs sm:text-sm font-medium text-black dark:text-gray-300 overflow-hidden">
-                                                    {user?.mobile}
-                                                </p>
+                                                {isEditMode ? (
+                                                    <input
+                                                        type="text"
+                                                        name="mobile"
+                                                        className="text-xs sm:text-sm font-medium text-black dark:text-gray-300 w-full p-2 border rounded"
+                                                        value={formik.values.mobile}
+                                                        onChange={formik.handleChange}
+                                                    />
+                                                ) : (
+                                                    <p className="text-xs sm:text-sm font-medium text-black dark:text-gray-300 overflow-hidden">
+                                                        {user?.mobile}
+                                                    </p>
+                                                )}
                                             </div>
+                                        </div>
+
+                                        <div className="flex justify-between mt-4 w-full">
+                                            {isEditMode ? (
+                                                <button
+                                                    type="button"
+                                                    onClick={formik.handleSubmit}
+                                                    className="bg-blue-500 text-white p-2 rounded"
+                                                >
+                                                    Save Changes
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setIsEditMode(true)}
+                                                    className="bg-green-500 text-white p-2 rounded"
+                                                >
+                                                    Edit Profile
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
