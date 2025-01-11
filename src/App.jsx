@@ -18,7 +18,7 @@ import CartCheckOut from './components/CartCheckOut';
 import PaymentPage from './components/PaymentPage';
 import AllOrders from './user/AllOrders';
 import AdminAllOrders from './admin/AdminAllOrders';
-import AllUsers from './admin/AllUsers';
+// import AllUsers from './admin/AllUsers';
 import AddCarousel from './admin/AddCarousel';
 import About from './admin/About';
 import OurMission from './admin/OurMission';
@@ -39,6 +39,7 @@ import { ThemeProvider } from './admin/Theme';
 import History from './admin/History';
 import Schedule from './admin/Schedule';
 import AvgIncome from './admin/AvgIncome';
+import AllUsers from './admin/AllUSers';
 // import MostViewed from './admin/MostViewed';
 
 // Create Contexts
