@@ -189,7 +189,7 @@ const Profile = () => {
                                     <span className="loading loading-spinner text-warning loading-lg"></span>
                                 ) : (
                                     <motion.img
-                                        src={user.image}
+                                        src={user && user.image}
                                         className="w-24 h-24 rounded-full border-4 border-golden cursor-pointer mb-4"
                                         onClick={handleClick}
                                         whileHover={{ scale: 1.1 }}
