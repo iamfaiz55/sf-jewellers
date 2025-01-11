@@ -36,11 +36,11 @@ const UserNavbar = () => {
     const totalAfterDiscount = subtotal - discountAmount;
 
     return <>
-        <div className="bg-light-golden dark:bg-gray-800 py-2">
+        <div className="bg-light-golden dark:bg-gray-800 py-2 ">
             <div className="m-2 md:m-5 z-20 relative">
                 <div className="navbar rounded-lg bg-light-golden dark:bg-gray-800">
                     {/* Logo Section */}
-                    <div className="flex-1 flex items-center space-x-4">
+                    <div className="flex-1 flex items-center space-x-4 ">
                         <Link to="/">
                             <img className="w-16 h-12 md:w-20 md:h-14" src={companyDetails?.logo} alt="Logo" />
                         </Link>
@@ -68,7 +68,7 @@ const UserNavbar = () => {
 
 
                         {/* Desktop Menu */}
-                        <div className="hidden md:flex space-x-6 z-1000 ">
+                        <div className="hidden md:flex space-x-6 z-1000">
                             {/* Categories Dropdown */}
                             {/* <div className="dropdown dropdown-hover z-1000">
                                 <div className="btn btn-ghost dark:text-white text-gray-900">Categories</div>
@@ -87,7 +87,7 @@ const UserNavbar = () => {
 
 
                             {/* Menus Dropdown */}
-                            <div className="dropdown dropdown-hover z-1000">
+                            <div className="dropdown dropdown-hover z-1000 ">
                                 <div className="btn btn-ghost dark:text-white">Menus</div>
                                 <div className="dropdown-content p-4 bg-light-golden dark:bg-gray-800 rounded-box shadow w-80">
                                     {navmenus?.map(menu => (
