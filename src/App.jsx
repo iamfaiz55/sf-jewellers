@@ -18,7 +18,7 @@ import CartCheckOut from './components/CartCheckOut';
 import PaymentPage from './components/PaymentPage';
 import AllOrders from './user/AllOrders';
 import AdminAllOrders from './admin/AdminAllOrders';
-// import AllUsers from './admin/AllUsers';
+import AllUsers from './admin/AllUsers';
 import AddCarousel from './admin/AddCarousel';
 import About from './admin/About';
 import OurMission from './admin/OurMission';
@@ -88,7 +88,7 @@ const App = () => {
         { path: "get-contacts", element: <AdminProtected compo={<GetContacts />} /> },
         { path: "get-history/:id", element: <AdminProtected compo={<History />} /> },
         { path: "addsImage", element: <AdminProtected compo={<AdminAddImages />} /> },
-        // { path: "allUsers", element: <AdminProtected compo={<AllUsers />} /> },
+        { path: "allUsers", element: <AdminProtected compo={<AllUsers />} /> },
         { path: "admin-scroll-card", element: <AdminProtected compo={<AdminScrollCards />} /> },
         { path: "navmenu", element: <AdminProtected compo={<Navmenu />} /> },
         { path: "addresses", element: <AdminProtected compo={<CompanyAddress />} /> },
