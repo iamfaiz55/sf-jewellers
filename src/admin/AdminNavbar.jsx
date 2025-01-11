@@ -164,6 +164,31 @@ const AdminNavbar = () => {
                             </Link>
                         </li>
                         <li>
+                            <Link to="/admin/addsImage" className="block p-2 rounded-lg hover:bg-yellow-100 dark:hover:bg-gray-700">
+                            Adds Images
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to="/admin/navmenu" className="block p-2 rounded-lg hover:bg-yellow-100 dark:hover:bg-gray-700">
+                            Nav Menu
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to="/admin/avg-income" className="block p-2 rounded-lg hover:bg-yellow-100 dark:hover:bg-gray-700">
+                            Avg Monthly Income
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to="/admin/schedule" className="block p-2 rounded-lg hover:bg-yellow-100 dark:hover:bg-gray-700">
+                            Schedule
+                            </Link>
+                        </li>
+                        {/* { section: 'schedule', label: '', path: '/admin/' }, */}
+
+                        {/* { section: 'addsImages', label: 'Adds Images', path: '/admin/' },
+        { section: 'navmenu', label: '', path: '/admin/' },
+        { section: 'avg-monthly-income', label: '', path: '/admin/' }, */}
+                        <li>
                             <button
                                 onClick={() => logoutAdmin()}
                                 type="button"
