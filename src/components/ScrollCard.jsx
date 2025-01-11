@@ -143,7 +143,7 @@ const startScrolling = () => {
 return (
   <div
     ref={scrollContainerRef}
-    className="flex overflow-hidden whitespace-nowrap w-full h-[150px] md:h-[230px] bg-light-golden items-center px-2 space-x-4 "
+    className="flex overflow-hidden whitespace-nowrap  h-[150px] md:h-[230px] bg-light-golden dark:bg-gray-900 items-center px-2 space-x-4  m-5 md:m-0"
     onMouseEnter={stopScrolling} // Stop scrolling on hover
     onMouseLeave={startScrolling} // Resume scrolling when mouse leaves
   >

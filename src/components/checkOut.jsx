@@ -151,9 +151,9 @@ const CheckOut = () => {
                             <button className="btn bg-yellow-500 dark:bg-yellow-600 text-black hover:bg-yellow-600 dark:hover:bg-yellow-700 z-1" onClick={() => document.getElementById('add').showModal()}>
                                 Add Address
                             </button>
-                            <dialog id="add" className="modal">
-                                <div className="modal-box bg-gray-800 text-gray-200">
-                                    <h3 className="font-bold text-lg text-yellow-400">Add Address</h3>
+                            <dialog id="add" className="modal p-14">
+                                <div className="modal-box bg-light-golden dark:bg-gray-500 mb-36">
+                                    <h3 className="font-bold text-lg text-yellow-400 text-center">Add Address</h3>
                                     <Form />
                                 </div>
                             </dialog>
@@ -302,34 +302,86 @@ const Form = ({ edit }) => {
                     </div>
                 </div>
             ) : (
-                <form onSubmit={formik.handleSubmit}>
-                    <input {...formik.getFieldProps("houseNo")} type="text" placeholder="House No." className="input w-full my-2" />
-                    <input {...formik.getFieldProps("state")} type="text" placeholder="State" className="input w-full my-2" />
-                    <input {...formik.getFieldProps("city")} type="text" placeholder="City" className="input w-full my-2" />
-                    <input {...formik.getFieldProps("pincode")} type="number" placeholder="Pincode" className="input w-full my-2" />
-                    <input {...formik.getFieldProps("country")} type="text" placeholder="Country" className="input w-full my-2" />
-                    <input {...formik.getFieldProps("mobile")} type="number" placeholder="Mobile" className="input w-full my-2" />
-                    <input {...formik.getFieldProps("address")} type="string" placeholder="Address" className="input w-full my-2" />
-                    {/* { */}
-                    {/* // user && user.email */}
-                    {/* // ? <></> */}
-                    {/* // : <></> */}
-                    {/* // } */}
-                    <input disabled={user && user.email} {...formik.getFieldProps("email")} type="email" placeholder="Enter your email" className="input w-full my-2" />
-                    <select {...formik.getFieldProps("addressType")} className="select select-bordered w-full my-2">
-                        <option value="" disabled>Select Address Type</option>
-                        <option value="home">Home</option>
-                        <option value="office">Office</option>
-                    </select>
-                    <div className="modal-action">
-                        <button type="submit" className="btn bg-gray-400 text-black">
-                            {edit ? "Update" : "Add"} Address
-                        </button>
-                        <button type="button" onClick={() => document.getElementById(edit ? "update" : "add").close()} className="btn">
-                            Close
-                        </button>
+                <form onSubmit={formik.handleSubmit} className="px-6 py-5">
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                    <input
+                        {...formik.getFieldProps("houseNo")}
+                        type="text"
+                        placeholder="House No."
+                        className="input w-full"
+                    />
+                    <input
+                        {...formik.getFieldProps("state")}
+                        type="text"
+                        placeholder="State"
+                        className="input w-full"
+                    />
+                    <input
+                        {...formik.getFieldProps("city")}
+                        type="text"
+                        placeholder="City"
+                        className="input w-full"
+                    />
+                    <input
+                        {...formik.getFieldProps("pincode")}
+                        type="number"
+                        placeholder="Pincode"
+                        className="input w-full"
+                    />
+                    <input
+                        {...formik.getFieldProps("country")}
+                        type="text"
+                        placeholder="Country"
+                        className="input w-full"
+                    />
+                    <input
+                        {...formik.getFieldProps("mobile")}
+                        type="number"
+                        placeholder="Mobile"
+                        className="input w-full"
+                    />
+                </div>
+                <input
+                    {...formik.getFieldProps("address")}
+                    type="text"
+                    placeholder="Address"
+                    className="input w-full my-2"
+                />
+                <input
+                    disabled={user && user.email}
+                    {...formik.getFieldProps("email")}
+                    type="email"
+                    placeholder="Enter your email"
+                    className="input w-full my-2"
+                />
+                <select
+                    {...formik.getFieldProps("addressType")}
+                    className="select select-bordered w-full my-2"
+                >
+                    <option value="" disabled>
+                        Select Address Type
+                    </option>
+                    <option value="home">Home</option>
+                    <option value="office">Office</option>
+                </select>
+                <div className="modal-action flex justify-center">
+                    <div>
+                    <button type="submit" className="btn  ">
+                        {edit ? "Update" : "Add"} Address
+                    </button>
                     </div>
-                </form>
+                   <div>
+                   <button
+                        type="button"
+                        onClick={() => document.getElementById(edit ? "update" : "add").close()}
+                        className="btn"
+                    >
+                        Close
+                    </button>
+                   </div>
+                </div>
+            </form>
+            
             )}
         </>
     );

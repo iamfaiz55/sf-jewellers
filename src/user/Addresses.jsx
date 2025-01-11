@@ -28,8 +28,8 @@ const Addresses = () => {
                 <button className="btn bg-golden dark:bg-gray-700" onClick={() => document.getElementById('add').showModal()}>
                     Add Address
                 </button>
-                <dialog id="add" className="modal">
-                    <div className="modal-box max-w-sm sm:max-w-md bg-light-golden dark:bg-gray-500 p-6 rounded-lg mx-4 sm:mx-auto">
+                <dialog id="add" className="modal px-10 ">
+                    <div className="modal-box  bg-light-golden dark:bg-gray-500 p-6 rounded-lg  mb-24">
                         <h3 className="font-bold text-lg sm:text-xl text-gray-900 dark:text-white text-center mb-4">Add New Address</h3>
                         <Form />
                     </div>
@@ -246,93 +246,100 @@ const Form = ({ edit }) => {
                 </div>
             ) : (
                 <form onSubmit={formik.handleSubmit} className="p-4 sm:p-6 bg-light-golden dark:bg-gray-800 rounded-lg shadow-md max-w-md mx-auto">
-                    <input
-                        {...formik.getFieldProps("houseNo")}
-                        type="text"
-                        placeholder="House No."
-                        className="input w-full my-2 bg-light-golden-200 dark:bg-gray-700 placeholder-gray-500 dark:placeholder-gray-400 text-gray-800 dark:text-white text-sm sm:text-base py-2 border border-light-golden-300"
-                    />
-
-                    <select
-                        value={selectedCountry}
-                        onChange={handleCountryChange}
-                        className="select select-bordered w-full my-2 bg-light-golden-200 dark:bg-gray-700 text-gray-800 dark:text-white text-sm sm:text-base py-2 border border-light-golden-300"
-                    >
-                        <option value="" disabled>Select Country</option>
-                        {Object.keys(countriesData).map(country => (
-                            <option key={country} value={country}>{country}</option>
-                        ))}
-                    </select>
-
-                    <select
-                        value={selectedState}
-                        onChange={handleStateChange}
-                        disabled={!selectedCountry}
-                        className="select select-bordered w-full my-2 bg-light-golden-200 dark:bg-gray-700 text-gray-800 dark:text-white text-sm sm:text-base py-2 border border-light-golden-300"
-                    >
-                        <option value="" disabled>Select State</option>
-                        {selectedCountry && Object.keys(countriesData[selectedCountry].states).map(state => (
-                            <option key={state} value={state}>{state}</option>
-                        ))}
-                    </select>
-
-                    <select
-                        {...formik.getFieldProps("city")}
-                        onChange={handleCityChange}
-                        disabled={!selectedState}
-                        className={`select select-bordered w-full my-2 bg-light-golden-200 dark:bg-gray-700 placeholder-gray-500 dark:placeholder-gray-400 text-gray-800 dark:text-white text-sm sm:text-base py-2 border border-light-golden-300' : ''}`}
-                    >
-                        <option value="" disabled>Select City</option>
-                        {selectedState && cities.map(city => (
-                            <option key={city} value={city}>{city}</option>
-                        ))}
-                    </select>
-
-                    <input
-                        {...formik.getFieldProps("pincode")}
-                        type="number"
-                        placeholder="Pincode"
-                        className="input w-full my-2 bg-light-golden-200 dark:bg-gray-700 placeholder-gray-500 dark:placeholder-gray-400 text-gray-800 dark:text-white text-sm sm:text-base py-2 border border-light-golden-300"
-                    />
-
-                    <input
-                        {...formik.getFieldProps("mobile")}
-                        type="number"
-                        placeholder="Mobile"
-                        className="input w-full my-2 bg-light-golden-200 dark:bg-gray-700 placeholder-gray-500 dark:placeholder-gray-400 text-gray-800 dark:text-white text-sm sm:text-base py-2 border border-light-golden-300"
-                    />
-
-                    <input
-                        disabled={user && user.email}
-                        {...formik.getFieldProps("email")}
-                        type="email"
-                        placeholder="Enter your email"
-                        className="input w-full my-2 bg-light-golden-200 dark:bg-gray-700 placeholder-gray-500 dark:placeholder-gray-400 text-gray-800 dark:text-white text-sm sm:text-base py-2 border border-light-golden-300"
-                    />
-
-                    <select
-                        {...formik.getFieldProps("addressType")}
-                        className="select select-bordered w-full my-2 bg-light-golden-200 dark:bg-gray-700 text-gray-800 dark:text-white text-sm sm:text-base py-2 border border-light-golden-300"
-                    >
-                        <option value="" disabled>Select Address Type</option>
-                        <option value="home">Home</option>
-                        <option value="office">Office</option>
-                    </select>
-
-                    <div className="modal-action flex">
-                        <button type="submit" className="btn sm:w-auto bg-light-golden text-black dark:bg-gray-600 dark:text-white text-sm sm:text-base py-2 border border-light-golden-300">
-                            {edit ? "Update" : "Add"} Address
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => document.getElementById(edit ? "update" : "add").close()}
-                            className="btn sm:w-auto bg-light-golden-200 dark:bg-gray-600 text-black dark:text-white text-sm sm:text-base py-2 border border-light-golden-300"
-                        >
-                            Close
-                        </button>
-                    </div>
-                </form>
-
+                <input
+                  {...formik.getFieldProps("houseNo")}
+                  type="text"
+                  placeholder="House No."
+                  className="input w-full my-2 bg-light-golden-200 dark:bg-gray-700 placeholder-gray-500 dark:placeholder-gray-400 text-gray-800 dark:text-white text-sm sm:text-base py-2 border border-light-golden-300"
+                />
+              
+                <select
+                  value={selectedCountry}
+                  onChange={handleCountryChange}
+                  className="select select-bordered w-full my-2 bg-light-golden-200 dark:bg-gray-700 text-gray-800 dark:text-white text-sm sm:text-base py-2 border border-light-golden-300"
+                >
+                  <option value="" disabled>Select Country</option>
+                  {Object.keys(countriesData).map(country => (
+                    <option key={country} value={country}>{country}</option>
+                  ))}
+                </select>
+              
+                <select
+                  value={selectedState}
+                  onChange={handleStateChange}
+                  disabled={!selectedCountry}
+                  className="select select-bordered w-full my-2 bg-light-golden-200 dark:bg-gray-700 text-gray-800 dark:text-white text-sm sm:text-base py-2 border border-light-golden-300"
+                >
+                  <option value="" disabled>Select State</option>
+                  {selectedCountry && Object.keys(countriesData[selectedCountry].states).map(state => (
+                    <option key={state} value={state}>{state}</option>
+                  ))}
+                </select>
+              
+                <select
+                  {...formik.getFieldProps("city")}
+                  onChange={handleCityChange}
+                  disabled={!selectedState}
+                  className="select select-bordered w-full my-2 bg-light-golden-200 dark:bg-gray-700 placeholder-gray-500 dark:placeholder-gray-400 text-gray-800 dark:text-white text-sm sm:text-base py-2 border border-light-golden-300"
+                >
+                  <option value="" disabled>Select City</option>
+                  {selectedState && cities.map(city => (
+                    <option key={city} value={city}>{city}</option>
+                  ))}
+                </select>
+              
+                <input
+                  {...formik.getFieldProps("pincode")}
+                  type="number"
+                  placeholder="Pincode"
+                  className="input w-full my-2 bg-light-golden-200 dark:bg-gray-700 placeholder-gray-500 dark:placeholder-gray-400 text-gray-800 dark:text-white text-sm sm:text-base py-2 border border-light-golden-300"
+                />
+              
+                <input
+                  {...formik.getFieldProps("mobile")}
+                  type="number"
+                  placeholder="Mobile"
+                  className="input w-full my-2 bg-light-golden-200 dark:bg-gray-700 placeholder-gray-500 dark:placeholder-gray-400 text-gray-800 dark:text-white text-sm sm:text-base py-2 border border-light-golden-300"
+                />
+              
+                <input
+                  disabled={user && user.email}
+                  {...formik.getFieldProps("email")}
+                  type="email"
+                  placeholder="Enter your email"
+                  className="input w-full my-2 bg-light-golden-200 dark:bg-gray-700 placeholder-gray-500 dark:placeholder-gray-400 text-gray-800 dark:text-white text-sm sm:text-base py-2 border border-light-golden-300"
+                />
+              
+                <select
+                  {...formik.getFieldProps("addressType")}
+                  className="select select-bordered w-full my-2 bg-light-golden-200 dark:bg-gray-700 text-gray-800 dark:text-white text-sm sm:text-base py-2 border border-light-golden-300"
+                >
+                  <option value="" disabled>Select Address Type</option>
+                  <option value="home">Home</option>
+                  <option value="office">Office</option>
+                </select>
+              
+                <div className="modal-action flex justify-center">
+                <div>
+                <button 
+                    type="submit" 
+                    className="btn "
+                  >
+                    {edit ? "Update" : "Add"} Address
+                  </button>
+                </div>
+                 <div>
+                 <button
+                    type="button"
+                    onClick={() => document.getElementById(edit ? "update" : "add").close()}
+                    className="btn "
+                  >
+                    Close
+                  </button>
+                 </div>
+                </div>
+              </form>
+              
 
 
             )}

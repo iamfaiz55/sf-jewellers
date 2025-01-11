@@ -45,6 +45,7 @@ const PaymentPage = () => {
     const handlePaymentMethodChange = (e) => {
         setPaymentMethod(e.target.value);
     };
+console.log("cartData.cartItems", cartData.cartItems);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -72,7 +73,7 @@ const PaymentPage = () => {
                 orderItems: cartData.cartItems.map(item => ({
                     _id: item.productId._id,
                     quantity: item.quantity,
-                    varientId: item.productId.varient._id
+                    varientId: item.varientId
                 })),
             });
         }
@@ -117,7 +118,7 @@ const PaymentPage = () => {
     useEffect(() => {
         if (isSuccess || initiateSuccess) {
             toast.success("Order placed successfully! Thank you.");
-            if (cartData.cartItems.length > 1) {
+            if (cartData.cartItems.length > 0) {
                 deleteFull({ userId: user._id });
             }
             setCartData({});

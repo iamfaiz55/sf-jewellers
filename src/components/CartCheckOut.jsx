@@ -25,6 +25,8 @@ const CartCheckOut = () => {
     const { data: taxes } = useGetTaxesQuery();
     console.log(cartData);
     const finalData = cartData && cartData.cartItems.map(item => {
+        console.log(item);
+        
         const x = item.productId.varient.find(v => v._id == item.varientId)
 
 
