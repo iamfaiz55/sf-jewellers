@@ -12,6 +12,7 @@ export default {
     extend: {
       colors: {
         'light-golden': '#f9f2e8', 
+        // 'light-golden': '#f70h80', 
          "golden": '#f5c518',
         'golden-dark': '#f4b400',
         'amber': {
